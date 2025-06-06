@@ -1,15 +1,10 @@
 package com.virak.simpletodoapp
 
-import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
-import android.provider.CalendarContract.Calendars
-import android.util.Log
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -17,19 +12,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.MaterialToolbar
 import com.virak.simpletodoapp.databinding.ActivityMainBinding
 import com.virak.simpletodoapp.utils.CalendarManager
+import com.virak.simpletodoapp.utils.CustomSimpleWheelPicker
 import com.virak.simpletodoapp.utils.adapter.CalendarMonthAdapter
 import com.virak.simpletodoapp.viewmodels.CalendarViewModel
 import kotlinx.coroutines.launch
-import java.time.YearMonth
 
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding:ActivityMainBinding
     private val calendarViewModel: CalendarViewModel by viewModels()
+    private val dateWheelPicker by lazy {
+        CustomSimpleWheelPicker()
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +51,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeEventClick(){
+        binding.layoutHeader.setOnClickListener {
+            val currentDisplayMonth = calendarViewModel.currentDisplayDate.value[calendarViewModel.currentDisplayDateIndex.value.first]
+            dateWheelPicker.showPicker(supportFragmentManager,currentDisplayMonth.monthName, currentYear = currentDisplayMonth.year)
+        }
         binding.btnNext.setOnClickListener {
             calendarViewModel.setCurrentTapIndex(CalendarManager.CalendarAction.ClickNextMonth)
         }
