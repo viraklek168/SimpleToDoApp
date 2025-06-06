@@ -1,0 +1,22 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.SimpleTodoApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+    <style name="AppBarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/color_fed698</item>
+        <item name="title">@string/app_name</item>
+        <item name="titleTextColor">@color/color_6A9C89</item>
+        <item name="titleTextAppearance">@style/AppBarTextAppearance</item>
+        <item name="logo">@drawable/ic_home_menu</item>
+        <item name="titleMarginStart">28dp</item>
+    </style>
+    <style name="AppBarTextAppearance" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/color_6A9C89</item>
+    </style>
+</resources>
