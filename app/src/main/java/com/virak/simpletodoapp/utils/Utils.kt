@@ -38,8 +38,8 @@ object CalendarManager{
         object ClickNextMonth : CalendarAction()
         object ClickPreviousMonth : CalendarAction()
     }
-    val maximumYear = 9999
-    val defaultYear = 0
+    val maximumYear = 2100
+    val defaultYear = 1970
     val defaultMonth = Calendar.JANUARY
     val defaultDay = 1
     private var startYear = 0
