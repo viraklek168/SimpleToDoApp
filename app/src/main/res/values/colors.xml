@@ -5,5 +5,6 @@
     <color name="black_34_alpha">#34000000</color>
     <color name="color_FFA725">#FFA725</color>
     <color name="color_fed698">#FED698</color>
+    <color name="color_fed698_alpha_70">#B3FED698</color>
     <color name="color_6A9C89">#6A9C89</color>
 </resources>

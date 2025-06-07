@@ -2,6 +2,7 @@ package com.virak.simpletodoapp
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
@@ -15,6 +16,8 @@ import androidx.lifecycle.lifecycleScope
 import com.virak.simpletodoapp.databinding.ActivityMainBinding
 import com.virak.simpletodoapp.utils.CalendarManager
 import com.virak.simpletodoapp.utils.CustomSimpleWheelPicker
+import com.virak.simpletodoapp.utils.DayClickedEvent
+import com.virak.simpletodoapp.utils.SimpleEventBus
 import com.virak.simpletodoapp.utils.adapter.CalendarMonthAdapter
 import com.virak.simpletodoapp.viewmodels.CalendarViewModel
 import kotlinx.coroutines.launch
@@ -51,6 +54,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeEventClick(){
+        SimpleEventBus.subscribe {
+            if(it is DayClickedEvent){
+                Log.i("croco","${it.day}")
+            }
+        }
         binding.layoutHeader.setOnClickListener {
             val currentDisplayMonth = calendarViewModel.currentDisplayDate.value[calendarViewModel.currentDisplayDateIndex.value.first]
             dateWheelPicker.showPicker(supportFragmentManager,currentDisplayMonth.monthName, currentYear = currentDisplayMonth.year)
