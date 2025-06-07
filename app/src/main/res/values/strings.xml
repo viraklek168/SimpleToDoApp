@@ -21,4 +21,8 @@
     <string name="sat">Sat</string>
     <string name="sun">Sun</string>
     <string name="month_display_header_title">%s, %d</string>
+    <string name="task_name">Task Name</string>
+    <string name="task_description">Task Description</string>
+    <string name="task_time">Task Time</string>
+    <string name="add_task">Add Task</string>
 </resources>

@@ -6,6 +6,87 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg_fed698_rounded_corner_15">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tv_task_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/white"
+            app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge"
+            android:layout_marginTop="44dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            app:boxStrokeColor="@color/color_6A9C89"
+            app:hintTextColor="@color/color_6A9C89"
+            android:textColorHint="@color/color_6A9C89"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_task_name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/task_name"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tv_task_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/white"
+            app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            app:boxStrokeColor="@color/color_6A9C89"
+            app:hintTextColor="@color/color_6A9C89"
+            android:textColorHint="@color/color_6A9C89"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_task_name">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_task_description_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/task_description"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tv_task_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/white"
+            app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            app:boxStrokeColor="@color/color_6A9C89"
+            app:hintTextColor="@color/color_6A9C89"
+            android:textColorHint="@color/color_6A9C89"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_task_description">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_task_time_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:hint="@string/task_time"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_create"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_task"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/color_6A9C89"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="35dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_task_time"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

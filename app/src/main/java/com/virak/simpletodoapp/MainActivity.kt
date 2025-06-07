@@ -19,6 +19,7 @@ import com.virak.simpletodoapp.utils.CustomSimpleTaskBottomSheet
 import com.virak.simpletodoapp.utils.CustomSimpleWheelPicker
 import com.virak.simpletodoapp.utils.SimpleEventBus
 import com.virak.simpletodoapp.utils.adapter.CalendarMonthAdapter
+import com.virak.simpletodoapp.utils.getMonthName
 import com.virak.simpletodoapp.viewmodels.CalendarViewModel
 import kotlinx.coroutines.launch
 
@@ -59,7 +60,15 @@ class MainActivity : AppCompatActivity() {
     private fun observeEventClick(){
         SimpleEventBus.subscribe {
             if(it is MyCalendarDay){
-                taskBottomsheet.showBottomSheet(supportFragmentManager)
+                taskBottomsheet.setOnDismiss {
+                    Log.i("dragon","${it}")
+                }
+                taskBottomsheet.showBottomSheet(
+                    supportFragmentManager,
+                    day = it.day.toString(),
+                    month = getMonthName(it.parentMonth),
+                    year = it.parentYear.toString()
+                )
             }
         }
         binding.tvHeaderTitle.setOnClickListener {
