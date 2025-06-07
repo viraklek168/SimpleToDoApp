@@ -52,6 +52,7 @@ object CalendarManager{
     sealed class CalendarAction{
         object ClickNextMonth : CalendarAction()
         object ClickPreviousMonth : CalendarAction()
+        object ClickNeutralMonth : CalendarAction()
     }
     val maximumYear = 2100
     val defaultYear = 1970
@@ -92,13 +93,15 @@ object CalendarManager{
         val offsetDay = (calendarObject.get(Calendar.DAY_OF_WEEK) - 2 + 7 ) % 7
         repeat(offsetDay){
             listDays.add(
-                MyCalendarDay(day = 0)
+                MyCalendarDay(day = 0, parentMonth = 0, parentYear = 0)
             )
         }
         for(dayIndex in 1..calendarObject.getActualMaximum(Calendar.DAY_OF_MONTH)){
             listDays.add(
                 MyCalendarDay(
                     day = dayIndex,
+                    parentYear = year,
+                    parentMonth = monthIndex,
                     isCurrent = dayIndex == currentDay && monthIndex == currentMonth && year == currentYear
                 )
             )

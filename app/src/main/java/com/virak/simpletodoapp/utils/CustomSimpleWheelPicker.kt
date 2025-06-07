@@ -1,7 +1,9 @@
 package com.virak.simpletodoapp.utils
 
+import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -36,11 +38,16 @@ class CustomSimpleWheelPicker : BottomSheetDialogFragment() {
         R.string.month_september.string(),
         R.string.month_october.string(),
         R.string.month_november.string(),
-        R.string.month_december.string()
+        R.string.month_december.string(),
+        "",
+        ""
     )
-    private val listYears = listOf("","") + (1970..2100).map { it.toString() }.toList()
+    private val listYears = listOf("","") + (1970..2100).map { it.toString() }.toList() + listOf("","")
     private var currentMonthPosition = 6
     private var currentYearPosition = 12
+    private var currentSelectYear = 0
+    private var currentSelectMonth = ""
+    private var onDismiss: (String, Int) -> Unit = { m: String, y: Int -> }
 
     override fun onStart() {
         super.onStart()
@@ -97,6 +104,11 @@ class CustomSimpleWheelPicker : BottomSheetDialogFragment() {
                         child.scaleX = scale
                         child.scaleY = scale
                         child.alpha = scale
+                        if(scale == 1.2f){
+                            if(child is TextView){
+                                currentSelectMonth = child.text.toString()
+                            }
+                        }
                     }
                 }
 
@@ -119,6 +131,11 @@ class CustomSimpleWheelPicker : BottomSheetDialogFragment() {
                     val layoutManager = layoutManager as LinearLayoutManager
                     val offset = centerRecyclerView - 20
                     layoutManager.scrollToPositionWithOffset(currentMonthPosition, offset) // Item at position 5 appears 100px below top
+                    if(scale == 1.2f){
+                        if(child is TextView){
+                            currentSelectMonth = child.text.toString()
+                        }
+                    }
                 }
             }
         }
@@ -147,6 +164,11 @@ class CustomSimpleWheelPicker : BottomSheetDialogFragment() {
                         child.scaleX = scale
                         child.scaleY = scale
                         child.alpha = scale
+                        if(scale == 1.2f){
+                            if(child is TextView){
+                                currentSelectYear = child.text.toString().toInt()
+                            }
+                        }
                     }
                 }
 
@@ -168,10 +190,23 @@ class CustomSimpleWheelPicker : BottomSheetDialogFragment() {
                     child.alpha = scale
                     val layoutManager = layoutManager as LinearLayoutManager
                     val offset = centerRecyclerView - 20
-                    layoutManager.scrollToPositionWithOffset(currentYearPosition, offset) // Item at position 5 appears 100px below top
+                    layoutManager.scrollToPositionWithOffset(currentYearPosition, offset)
+                    if(scale == 1.2f){
+                        if(child is TextView){
+                            currentSelectYear = child.text.toString().toInt()
+                        }
+                    }
                 }
             }
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismiss.invoke(currentSelectMonth,currentSelectYear)
+    }
+    fun setOnDismiss(onDismiss:(String,Int)->Unit){
+        this.onDismiss = onDismiss
     }
     fun showPicker(
         fragmentManager:FragmentManager,

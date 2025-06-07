@@ -15,5 +15,3 @@ object SimpleEventBus {
         listeners.remove(listener)
     }
 }
-
-data class DayClickedEvent(val day: String)

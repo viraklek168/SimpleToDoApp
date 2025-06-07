@@ -27,6 +27,11 @@ class CalendarViewModel : ViewModel(){
                     Pair(if(newValue < 0) 0 else index ?: newValue,isSmoothAnimate)
                 }
             }
+            CalendarManager.CalendarAction.ClickNeutralMonth -> {
+                _currentDisplayDateIndex.update {
+                    Pair(index?:0,isSmoothAnimate)
+                }
+            }
         }
     }
 }

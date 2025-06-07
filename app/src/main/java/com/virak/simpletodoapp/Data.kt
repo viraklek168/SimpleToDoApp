@@ -8,5 +8,7 @@ data class MyCalendarDisplayDate(
 
 data class MyCalendarDay(
     val day:Int,
+    val parentYear:Int,
+    val parentMonth:Int,
     val isCurrent:Boolean = false
 )
