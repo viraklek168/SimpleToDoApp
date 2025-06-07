@@ -2,7 +2,10 @@ package com.virak.simpletodoapp.utils
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.icu.util.Calendar
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.virak.simpletodoapp.Application
 import com.virak.simpletodoapp.MyCalendarDay
 import com.virak.simpletodoapp.MyCalendarDisplayDate
@@ -12,6 +15,18 @@ object ActivityManager {
     fun openActivity(currentActivity:Context,targetActivity:Class<*>){
         val intent = Intent(currentActivity,targetActivity)
         currentActivity.startActivity(intent)
+    }
+}
+
+class SpaceItemDecoration(private val spacePx: Int) : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
+    ) {
+        outRect.bottom = spacePx
+        // Optionally add space to other sides
+        // outRect.top = spacePx
+        // outRect.left = spacePx
+        // outRect.right = spacePx
     }
 }
 
