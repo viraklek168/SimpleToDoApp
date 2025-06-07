@@ -28,13 +28,18 @@
                 android:src="@drawable/ic_previous"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/image_description"/>
-            <TextView
-                android:id="@+id/tv_header_title"
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="center"
-                tools:text="September"/>
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_header_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textAlignment="center"
+                    tools:text="September"/>
+            </FrameLayout>
             <ImageView
                 android:id="@+id/btn_next"
                 android:layout_width="21dp"

@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.virak.simpletodoapp.databinding.ActivityMainBinding
 import com.virak.simpletodoapp.utils.CalendarManager
+import com.virak.simpletodoapp.utils.CustomSimpleTaskBottomSheet
 import com.virak.simpletodoapp.utils.CustomSimpleWheelPicker
 import com.virak.simpletodoapp.utils.SimpleEventBus
 import com.virak.simpletodoapp.utils.adapter.CalendarMonthAdapter
@@ -27,6 +28,9 @@ class MainActivity : AppCompatActivity() {
     private val calendarViewModel: CalendarViewModel by viewModels()
     private val dateWheelPicker by lazy {
         CustomSimpleWheelPicker()
+    }
+    private val taskBottomsheet by lazy {
+        CustomSimpleTaskBottomSheet()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -55,10 +59,10 @@ class MainActivity : AppCompatActivity() {
     private fun observeEventClick(){
         SimpleEventBus.subscribe {
             if(it is MyCalendarDay){
-
+                taskBottomsheet.showBottomSheet(supportFragmentManager)
             }
         }
-        binding.layoutHeader.setOnClickListener {
+        binding.tvHeaderTitle.setOnClickListener {
             val currentDisplayMonth = calendarViewModel.currentDisplayDate.value[calendarViewModel.currentDisplayDateIndex.value.first]
             dateWheelPicker.setOnDismiss{month,year->
                 val selectDateObject = calendarViewModel.currentDisplayDate.value.find {
