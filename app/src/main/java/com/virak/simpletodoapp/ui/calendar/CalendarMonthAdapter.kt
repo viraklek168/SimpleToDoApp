@@ -1,20 +1,19 @@
-package com.virak.simpletodoapp.utils.adapter
+package com.virak.simpletodoapp.ui.calendar
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.virak.simpletodoapp.MyCalendarDisplayDate
 import com.virak.simpletodoapp.databinding.LayoutItemMonthBinding
 
 class CalendarMonthAdapter(
-    private val listDisplayDate: List<MyCalendarDisplayDate>
+    private val listDisplayDate: MutableList<MyCalendarDisplayDate>
 ) : RecyclerView.Adapter<CalendarMonthAdapter.CalendarMonthViewHolder>() {
 
     inner class CalendarMonthViewHolder(private val binding: LayoutItemMonthBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(myDisplayDate:MyCalendarDisplayDate) {
+        fun bind(myDisplayDate: MyCalendarDisplayDate) {
             binding.rvDays.apply {
                 layoutManager = GridLayoutManager(this.context,7)
                 adapter = CalendarDayAdapter(myDisplayDate.listDays)
@@ -29,6 +28,12 @@ class CalendarMonthAdapter(
 
     override fun onBindViewHolder(holder: CalendarMonthViewHolder, position: Int) {
         holder.bind(listDisplayDate[position])
+    }
+
+    fun updateData(newList:List<MyCalendarDisplayDate>){
+        listDisplayDate.clear()
+        listDisplayDate.addAll(newList)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = listDisplayDate.size

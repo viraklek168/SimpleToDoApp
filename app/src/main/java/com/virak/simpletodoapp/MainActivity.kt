@@ -2,7 +2,6 @@ package com.virak.simpletodoapp
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
@@ -10,28 +9,41 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.virak.simpletodoapp.databinding.ActivityMainBinding
-import com.virak.simpletodoapp.utils.CalendarManager
-import com.virak.simpletodoapp.utils.CustomSimpleTaskBottomSheet
-import com.virak.simpletodoapp.utils.CustomSimpleWheelPicker
+import com.virak.simpletodoapp.di.CalendarViewModelFactory
+import com.virak.simpletodoapp.ui.calendar.CustomSimpleTaskBottomSheet
+import com.virak.simpletodoapp.ui.calendar.CustomSimpleWheelPicker
 import com.virak.simpletodoapp.utils.SimpleEventBus
-import com.virak.simpletodoapp.utils.adapter.CalendarMonthAdapter
+import com.virak.simpletodoapp.ui.calendar.CalendarMonthAdapter
 import com.virak.simpletodoapp.utils.getMonthName
-import com.virak.simpletodoapp.viewmodels.CalendarViewModel
+import com.virak.simpletodoapp.ui.calendar.CalendarViewModel
+import com.virak.simpletodoapp.ui.calendar.CustomTaskDisplayBottomSheet
+import com.virak.simpletodoapp.ui.calendar.MyCalendarDay
+import com.virak.simpletodoapp.ui.calendar.ShowTask
+import com.virak.simpletodoapp.utils.CalendarDataGenerator
 import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding:ActivityMainBinding
-    private val calendarViewModel: CalendarViewModel by viewModels()
+    private val calendarAdapter by lazy {
+        CalendarMonthAdapter(mutableListOf())
+    }
+    private val calendarViewModel: CalendarViewModel by viewModels{
+        CalendarViewModelFactory(application)
+    }
     private val dateWheelPicker by lazy {
         CustomSimpleWheelPicker()
     }
     private val taskBottomsheet by lazy {
         CustomSimpleTaskBottomSheet()
+    }
+    private val showTaskBottomsheet by lazy {
+        CustomTaskDisplayBottomSheet()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -40,34 +52,31 @@ class MainActivity : AppCompatActivity() {
         init()
         initDataBinding()
         observeEventClick()
+        calendarViewModel.getCalendarData()
     }
 
     private fun initDataBinding(){
         binding.viewpager2.apply {
-            offscreenPageLimit = 12
-            adapter = CalendarMonthAdapter(calendarViewModel.currentDisplayDate.value)
+            adapter = calendarAdapter
         }
-        calendarViewModel.setCurrentTapIndex(CalendarManager.CalendarAction.ClickNextMonth,
-            calendarViewModel.currentDisplayDate.value.indexOf(
-                calendarViewModel.currentDisplayDate.value.find {
-                    it.listDays.firstOrNull { it.isCurrent }?.isCurrent == true
-                }
-            ),
-            false
-        )
     }
 
     private fun observeEventClick(){
         SimpleEventBus.subscribe {
             if(it is MyCalendarDay){
-                taskBottomsheet.setOnDismiss {
-                    Log.i("dragon","${it}")
+                taskBottomsheet.setOnAddTask {
+                    calendarViewModel.addTask(it)
                 }
                 taskBottomsheet.showBottomSheet(
                     supportFragmentManager,
                     day = it.day.toString(),
                     month = getMonthName(it.parentMonth),
                     year = it.parentYear.toString()
+                )
+            }else if(it is ShowTask){
+                showTaskBottomsheet.showBottomSheet(
+                    supportFragmentManager,
+                    it.listTasks,
                 )
             }
         }
@@ -78,26 +87,28 @@ class MainActivity : AppCompatActivity() {
                     it.monthName == month && it.year == year
                 }
                 val indexOfSelectDateObject = calendarViewModel.currentDisplayDate.value.indexOf(selectDateObject)
-                calendarViewModel.setCurrentTapIndex(CalendarManager.CalendarAction.ClickNeutralMonth, index = indexOfSelectDateObject )
+                calendarViewModel.setCurrentTapIndex(CalendarDataGenerator.CalendarAction.ClickNeutralMonth, index = indexOfSelectDateObject )
             }
             dateWheelPicker.showPicker(supportFragmentManager,currentDisplayMonth.monthName, currentYear = currentDisplayMonth.year)
         }
         binding.btnNext.setOnClickListener {
-            calendarViewModel.setCurrentTapIndex(CalendarManager.CalendarAction.ClickNextMonth)
+            calendarViewModel.setCurrentTapIndex(CalendarDataGenerator.CalendarAction.ClickNextMonth)
         }
         binding.btnPrevious.setOnClickListener {
-            calendarViewModel.setCurrentTapIndex(CalendarManager.CalendarAction.ClickPreviousMonth)
+            calendarViewModel.setCurrentTapIndex(CalendarDataGenerator.CalendarAction.ClickPreviousMonth)
         }
         lifecycleScope.launch {
             calendarViewModel.currentDisplayDate.collect{
-                binding.viewpager2.apply {
-                    offscreenPageLimit = 12
-                    adapter = CalendarMonthAdapter(calendarViewModel.currentDisplayDate.value)
+                if(it.isNotEmpty()){
+                    binding.viewpager2.apply {
+                        calendarAdapter.updateData(it.toMutableList())
+                    }
                 }
             }
         }
         lifecycleScope.launch {
             calendarViewModel.currentDisplayDateIndex.collect{
+                if(it.first == -1) return@collect
                 binding.tvHeaderTitle.text = getString(R.string.month_display_header_title,
                     calendarViewModel.currentDisplayDate.value[it.first].monthName,
                     calendarViewModel.currentDisplayDate.value[it.first].year)
@@ -123,6 +134,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun animateSplashScreenExit() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            installSplashScreen().setKeepOnScreenCondition{
+                calendarViewModel.currentDisplayDate.value.isEmpty()
+            }
             splashScreen.setOnExitAnimationListener { splashScreenView ->
                 val fadeOut = AnimationUtils.loadAnimation(this, R.anim.slide_left_exit)
                 splashScreenView.startAnimation(fadeOut)

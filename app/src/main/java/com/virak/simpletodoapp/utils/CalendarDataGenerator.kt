@@ -1,58 +1,15 @@
 package com.virak.simpletodoapp.utils
 
-import android.content.Context
-import android.content.Intent
-import android.graphics.Rect
 import android.icu.util.Calendar
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import com.virak.simpletodoapp.Application
-import com.virak.simpletodoapp.MyCalendarDay
-import com.virak.simpletodoapp.MyCalendarDisplayDate
-import com.virak.simpletodoapp.R
+import com.virak.simpletodoapp.ui.calendar.MyCalendarDay
+import com.virak.simpletodoapp.ui.calendar.MyCalendarDisplayDate
 
-object ActivityManager {
-    fun openActivity(currentActivity:Context,targetActivity:Class<*>){
-        val intent = Intent(currentActivity,targetActivity)
-        currentActivity.startActivity(intent)
-    }
-}
-
-class SpaceItemDecoration(private val spacePx: Int) : RecyclerView.ItemDecoration() {
-    override fun getItemOffsets(
-        outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
-    ) {
-        outRect.bottom = spacePx
-        // Optionally add space to other sides
-        // outRect.top = spacePx
-        // outRect.left = spacePx
-        // outRect.right = spacePx
-    }
-}
-
-fun Int.string() = Application.baseApplicationContext.getString(this)
-
-fun getMonthName(monthIndex:Int):String = when(monthIndex){
-        Calendar.JANUARY -> R.string.month_january.string()
-        Calendar.FEBRUARY -> R.string.month_february.string()
-        Calendar.MARCH -> R.string.month_march.string()
-        Calendar.APRIL -> R.string.month_april.string()
-        Calendar.MAY -> R.string.month_may.string()
-        Calendar.JUNE -> R.string.month_june.string()
-        Calendar.JULY -> R.string.month_july.string()
-        Calendar.AUGUST -> R.string.month_august.string()
-        Calendar.SEPTEMBER -> R.string.month_september.string()
-        Calendar.OCTOBER -> R.string.month_october.string()
-        Calendar.NOVEMBER -> R.string.month_november.string()
-        Calendar.DECEMBER -> R.string.month_december.string()
-        else -> R.string.month_january.string() // default or fallback
-    }
-
-object CalendarManager{
+object CalendarDataGenerator{
     sealed class CalendarAction{
         object ClickNextMonth : CalendarAction()
         object ClickPreviousMonth : CalendarAction()
         object ClickNeutralMonth : CalendarAction()
+        object UpdateData : CalendarAction()
     }
     val maximumYear = 2100
     val defaultYear = 1970

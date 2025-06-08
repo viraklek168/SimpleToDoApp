@@ -48,6 +48,8 @@ dependencies {
     implementation(libs.androidx.dynamicanimation)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation (libs.androidx.lifecycle.viewmodel.ktx)
+    kapt(libs.androidx.room.compiler)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)

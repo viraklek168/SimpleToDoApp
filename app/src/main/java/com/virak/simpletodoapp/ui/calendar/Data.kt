@@ -1,7 +1,8 @@
-package com.virak.simpletodoapp
+package com.virak.simpletodoapp.ui.calendar
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.virak.simpletodoapp.data.local.MyCalendarTask
 
 data class MyCalendarDisplayDate(
     val year:Int,
@@ -13,13 +14,10 @@ data class MyCalendarDay(
     val day:Int,
     val parentYear:Int,
     val parentMonth:Int,
-    val isCurrent:Boolean = false
+    val isCurrent:Boolean = false,
+    val listTasks:List<MyCalendarTask>? = null
 )
 
-@Entity
-data class MyCalendarTask(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val taskName:String,
-    val taskDescription:String,
-    val taskDate:Long
+data class ShowTask(
+    val listTasks: List<MyCalendarTask>
 )

@@ -1,10 +1,7 @@
-package com.virak.simpletodoapp.utils
+package com.virak.simpletodoapp.ui.calendar
 
 import android.content.DialogInterface
-import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +15,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.virak.simpletodoapp.BR
 import com.virak.simpletodoapp.R
 import com.virak.simpletodoapp.databinding.LayoutCustomSimpleWheelPickerBinding
+import com.virak.simpletodoapp.utils.SpaceItemDecoration
 import com.virak.simpletodoapp.utils.adapter.SimpleAdapter
+import com.virak.simpletodoapp.utils.extensions.string
 import kotlin.math.abs
 
 
@@ -213,7 +212,7 @@ class CustomSimpleWheelPicker : BottomSheetDialogFragment() {
         currentMonth:String,
         currentYear:Int
     ){
-        show(fragmentManager,CustomSimpleWheelPicker::class.java.simpleName)
+        show(fragmentManager, CustomSimpleWheelPicker::class.java.simpleName)
         this.currentMonthPosition = listMonths.indexOf(currentMonth)
         this.currentYearPosition = listYears.indexOf(currentYear.toString())
     }

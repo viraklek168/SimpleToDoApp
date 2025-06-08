@@ -1,42 +1,27 @@
-package com.virak.simpletodoapp.utils
+package com.virak.simpletodoapp.ui.calendar
 
 import android.content.DialogInterface
 import android.content.res.Resources
-import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import com.virak.simpletodoapp.BR
-import com.virak.simpletodoapp.MyCalendarTask
-import com.virak.simpletodoapp.R
+import com.virak.simpletodoapp.data.local.MyCalendarTask
 import com.virak.simpletodoapp.databinding.LayoutCustomSimpleTaskBottomSheetBinding
-import com.virak.simpletodoapp.databinding.LayoutCustomSimpleWheelPickerBinding
-import com.virak.simpletodoapp.utils.adapter.SimpleAdapter
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import kotlin.math.abs
 
 
 class CustomSimpleTaskBottomSheet : BottomSheetDialogFragment() {
     lateinit var binding : LayoutCustomSimpleTaskBottomSheetBinding
-    private var onDismiss: (MyCalendarTask) -> Unit = { }
+    private var onAddedTask: (MyCalendarTask) -> Unit = { }
     private var currentSelectDate = ""
     private val timePicker by lazy {
         MaterialTimePicker.Builder()
@@ -78,6 +63,16 @@ class CustomSimpleTaskBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.btnCreate.setOnClickListener {
+            onAddedTask.invoke(
+                MyCalendarTask(
+                    taskName = binding.tvTaskName.editText?.text.toString(),
+                    taskDescription = binding.tvTaskDescriptionEditText.text.toString(),
+                    taskDate = getTaskDate(
+                        dateString = currentSelectDate,
+                        timeString = binding.tvTaskTimeEditText.text.toString()
+                    )
+                )
+            )
             dismiss()
         }
         binding.tvTaskTimeEditText.setOnClickListener {
@@ -102,16 +97,9 @@ class CustomSimpleTaskBottomSheet : BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        onDismiss.invoke(
-            MyCalendarTask(
-             taskName = binding.tvTaskName.editText?.text.toString(),
-                taskDescription = binding.tvTaskDescriptionEditText.text.toString(),
-                taskDate = getTaskDate(
-                    dateString = currentSelectDate,
-                    timeString = binding.tvTaskTimeEditText.text.toString()
-                )
-        )
-        )
+        resetData()
+    }
+    private fun resetData(){
         binding.tvTaskNameEditText.setText("")
         binding.tvTaskDescriptionEditText.setText("")
         binding.tvTaskTimeEditText.setText("")
@@ -146,8 +134,8 @@ class CustomSimpleTaskBottomSheet : BottomSheetDialogFragment() {
         val epochMillis = calendarDate.timeInMillis
         return epochMillis
     }
-    fun setOnDismiss(onDismiss:(MyCalendarTask)->Unit){
-        this.onDismiss = onDismiss
+    fun setOnAddTask(onAddedTask:(MyCalendarTask)->Unit){
+        this.onAddedTask = onAddedTask
     }
     fun showBottomSheet(
         fragmentManager:FragmentManager,
@@ -155,7 +143,8 @@ class CustomSimpleTaskBottomSheet : BottomSheetDialogFragment() {
         month:String,
         year:String
     ){
-        show(fragmentManager,CustomSimpleTaskBottomSheet::class.java.simpleName)
+        if(isVisible) return
+        show(fragmentManager, CustomSimpleTaskBottomSheet::class.java.simpleName)
         currentSelectDate = "$day $month $year"
     }
 }

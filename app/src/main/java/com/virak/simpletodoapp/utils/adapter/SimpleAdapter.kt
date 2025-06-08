@@ -1,12 +1,9 @@
 package com.virak.simpletodoapp.utils.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.virak.simpletodoapp.MyCalendarDay
-import com.virak.simpletodoapp.databinding.ItemCalendarCellBinding
 
 class SimpleAdapter<T>(
     private var items: List<T>,
