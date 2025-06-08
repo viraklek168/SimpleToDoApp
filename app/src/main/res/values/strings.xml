@@ -24,5 +24,8 @@
     <string name="task_name">Task Name</string>
     <string name="task_description">Task Description</string>
     <string name="task_time">Task Time</string>
+    <string name="task_name_colon">Task Name:</string>
+    <string name="task_description_colon">Task Description:</string>
+    <string name="task_time_colon">Task Time:</string>
     <string name="add_task">Add Task</string>
 </resources>

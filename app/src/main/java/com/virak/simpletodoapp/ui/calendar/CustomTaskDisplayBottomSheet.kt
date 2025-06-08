@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.virak.simpletodoapp.data.local.MyCalendarTask
@@ -48,7 +49,10 @@ class CustomTaskDisplayBottomSheet : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        listTasks
+        binding.rvTaskDisplay.apply {
+            adapter = CalendarShowTaskAdapter(listTasks)
+            layoutManager = LinearLayoutManager(context)
+        }
     }
 
     override fun onDismiss(dialog: DialogInterface) {
